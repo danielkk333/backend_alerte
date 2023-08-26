@@ -44,18 +44,18 @@ app.use(express.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 5000;
 
-app.post("/sendSms", async (req, res) => {
+app.post("/sendSm", async (req, res) => {
   const { message, nom, prenom, tel, adresse } = req.body;
   const data = `je suis en danger, je reponds au de nom de ${nom} ${prenom}, mon numero de telephone est ${tel}, mon adresse est ${adresse}, et ma localisation est ${message}.`;
 
-  twilio.messages
-    .create({
-      from: "+14706348154",
-      to: "+243827103485",
-      body: data,
-    })
-    .then((result) => console.log("message was sent"))
-    .catch((error) => console.error(error));
+  // twilio.messages
+  //   .create({
+  //     from: "+14706348154",
+  //     to: "+243827103485",
+  //     body: data,
+  //   })
+  //   .then((result) => console.log("message was sent"))
+  //   .catch((error) => console.error(error));
 
     // Create a transporter object using the default SMTP transport
 const transporter = nodemailer.createTransport({
@@ -130,14 +130,18 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ tel: req.body.tel });
-    const validated = await bcrypt.compare(req.body.password, user.password);
 
-    if (!user || !validated) {
+    if (!user) {
       res.json({success:false,error :'Identifiants incorrects'})
     } 
     else {
-      const {password, ...others} = user
-      res.json({success:true, user: others})
+    const validated = await bcrypt.compare(req.body.password, user.password);
+      if(!validated){
+        res.json({success:false,error :'Identifiants incorrects'})
+      }else{
+        const {password, ...others} = user
+        res.json({success:true, user: others})
+      } 
     }
   } catch (err) {
     res.json({success:false, error :'Connection impossible' })
@@ -259,39 +263,39 @@ const genToken = async () => {
   return result.access_token;
 };
 
-app.post("/sendSm", async function (req, res, next) {
+app.post("/sendSms", async function (req, res, next) {
   
-  // const token = await genToken();
+  const token = await genToken();
   const devPhoneNumber = process.env.NUMBER_DEV;
   const recipient = 243827103485;
   const { message, nom, prenom, tel, adresse,contact_proche } = req.body;
   const data = `je suis en danger, je reponds au de nom de ${nom} ${prenom}, mon numero de telephone est ${tel}, mon adresse est ${adresse}, et ma localisation est ${message}.`;
-  // axios
-  //   .post(
-  //     `https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B${devPhoneNumber}/requests`,
-  //     {
-  //       outboundSMSMessageRequest: {
-  //         address: `tel:+${recipient}`,
-  //         senderAddress: `tel:+${devPhoneNumber}`,
-  //         outboundSMSTextMessage: {
-  //           message: data,
-  //         },
-  //       },
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         Accept: "application/json",
-  //       },
-  //     }
-  //   )
-  //   .then((result) => res.send("success"))
-  //   .catch((err) => {
-  //     console.log(err);
-  //     return res
-  //       .status(500)
-  //       .send(err.response.data.requestError);
-  //   });
+  axios
+    .post(
+      `https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B${devPhoneNumber}/requests`,
+      {
+        outboundSMSMessageRequest: {
+          address: `tel:+${recipient}`,
+          senderAddress: `tel:+${devPhoneNumber}`,
+          outboundSMSTextMessage: {
+            message: data,
+          },
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    )
+    .then((result) => res.send("success"))
+    .catch((err) => {
+      console.log(err);
+      return res
+        .status(500)
+        .send(err.response.data.requestError);
+    });
   res.json({message:'error'})
 });
 
