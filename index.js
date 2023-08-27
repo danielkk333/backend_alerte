@@ -293,11 +293,7 @@ app.post("/sendSms", async function (req, res, next) {
     .then((result) => res.send("success"))
     .catch((err) => {
       console.log(err);
-      return res
-        .status(500)
-        .send(err.response.data.requestError);
     });
-  res.json({message:'error'})
 });
 
 const httpServer = createServer(app);
