@@ -117,7 +117,7 @@ app.post("/register", async (req, res) => {
       .then((myuser) => res.json({ myuser, success: true }))
       .catch((err) => console.log("error " + err));
   } catch (err) {
-    res.json({ success: false });
+    res.json({ success: false, error:"une erreur s'est produite" });
     console.log(err);
   }
 }else{
@@ -211,9 +211,10 @@ app.post('/storedDate', async(req,res)=>{
 
 app.get('/getStoreDate/:id', async(req,res)=>{
   const id = req.params.id
+  console.log(id);
 
   const storedDate = await User.findOne({_id:id})
-  if(storedDate){
+  if(storedDate.storedDate){
     res.json({success:true,storedDate:storedDate.storedDate})
   }else{
     res.json({success:false})
