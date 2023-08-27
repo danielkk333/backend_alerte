@@ -317,7 +317,10 @@ app.post("/sendSms", async function (req, res, next) {
         },
       }
     )
-    .then((result) => res.send("success"))
+    .then((result) => {
+      res.json({success:true})
+      console.log('sms envoye');
+    })
     .catch((err) => {
       console.log(err);
     });
