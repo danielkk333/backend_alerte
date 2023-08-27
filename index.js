@@ -268,7 +268,7 @@ app.post("/sendSms", async function (req, res, next) {
   
   const token = await genToken();
   const devPhoneNumber = process.env.NUMBER_DEV;
-  const recipient = 243827103485;
+  const recipient = 243974116531;
   const { message, nom, prenom, tel, adresse,contact_proche } = req.body;
   const data = `je suis en danger, je reponds au de nom de ${nom} ${prenom}, mon numero de telephone est ${tel}, mon adresse est ${adresse}, et ma localisation est ${message}.`;
 
