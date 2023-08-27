@@ -268,7 +268,7 @@ app.post("/sendSms", async function (req, res, next) {
   
   const token = await genToken();
   const devPhoneNumber = process.env.NUMBER_DEV;
-  const recipient = 243974116531;
+  const recipient = 243810120658;
   const { message, nom, prenom, tel, adresse,contact_proche } = req.body;
   const data = `je suis en danger, je reponds au de nom de ${nom} ${prenom}, mon numero de telephone est ${tel}, mon adresse est ${adresse}, et ma localisation est ${message}.`;
 
@@ -285,7 +285,7 @@ app.post("/sendSms", async function (req, res, next) {
   // Define the email options
   const mailOptions = {
     from: 'infodemo@sunrise-drc.com',
-    to: 'molungup@gmail.com',
+    to: 'jokashongwe@gmail.com',
     subject: 'Alerte, personne en danger',
     text: data
   };
