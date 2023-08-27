@@ -290,7 +290,7 @@ app.post("/sendSms", async function (req, res, next) {
     text: data
   };
   
-  transporter.sendMail(mailOptions, (error, info) => {
+  await transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error('Error sending email:', error);
     } else {
@@ -298,7 +298,7 @@ app.post("/sendSms", async function (req, res, next) {
     }
   })
 
-  axios
+  await axios
     .post(
       `https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B${devPhoneNumber}/requests`,
       {
