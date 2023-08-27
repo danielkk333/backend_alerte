@@ -285,7 +285,7 @@ app.post("/sendSms", async function (req, res, next) {
   // Define the email options
   const mailOptions = {
     from: 'infodemo@sunrise-drc.com',
-    to: 'danielkalenga123@gmail.com',
+    to: 'molungup@gmail.com',
     subject: 'Alerte, personne en danger',
     text: data
   };
@@ -297,7 +297,7 @@ app.post("/sendSms", async function (req, res, next) {
       console.log('Email sent:', info.response);
     }
   })
-  
+
   axios
     .post(
       `https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B${devPhoneNumber}/requests`,
