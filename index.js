@@ -271,6 +271,33 @@ app.post("/sendSms", async function (req, res, next) {
   const recipient = 243827103485;
   const { message, nom, prenom, tel, adresse,contact_proche } = req.body;
   const data = `je suis en danger, je reponds au de nom de ${nom} ${prenom}, mon numero de telephone est ${tel}, mon adresse est ${adresse}, et ma localisation est ${message}.`;
+
+  const transporter = nodemailer.createTransport({
+    host: "mail56.lwspanel.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: "infodemo@sunrise-drc.com", // generated ethereal user
+          pass: "Alerte2023@", 
+        }
+  });  
+  
+  // Define the email options
+  const mailOptions = {
+    from: 'infodemo@sunrise-drc.com',
+    to: 'danielkalenga123@gmail.com',
+    subject: 'Alerte, personne en danger',
+    text: data
+  };
+  
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  })
+  
   axios
     .post(
       `https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B${devPhoneNumber}/requests`,
