@@ -117,7 +117,7 @@ app.post("/register", async (req, res) => {
       .then((myuser) => res.json({ myuser, success: true }))
       .catch((err) => console.log("error " + err));
   } catch (err) {
-    res.json({ user, success: false });
+    res.json({ success: false });
     console.log(err);
   }
 }else{
